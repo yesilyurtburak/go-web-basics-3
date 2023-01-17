@@ -3,8 +3,9 @@ package render
 import (
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
+
+	"github.com/yesilyurtburak/go-web-basics-3/pkg/helpers"
 )
 
 // do not render everything while reloading the page, use templateCache instead.
@@ -18,9 +19,7 @@ func makeTemplateCache(t string) error {
 	}
 	// this creates a new template from the given files
 	tmpl, err := template.ParseFiles(templates...)
-	if err != nil {
-		log.Fatal(err)
-	}
+	helpers.ErrorCheck(err)
 	templateCache[t] = tmpl // add the loaded page's template data to the templateCache map.
 	return nil
 }
@@ -33,15 +32,11 @@ func RenderTemplate(w http.ResponseWriter, t string) {
 	_, inMap := templateCache[t]
 	if !inMap {
 		err = makeTemplateCache(t)
-		if err != nil {
-			log.Fatal(err)
-		}
+		helpers.ErrorCheck(err)
 	} else {
 		fmt.Println("Template is loaded from cache")
 	}
 	tmpl = templateCache[t]
 	err = tmpl.Execute(w, nil) // writes the template to the response writer `w`
-	if err != nil {
-		log.Fatal(err)
-	}
+	helpers.ErrorCheck(err)
 }
