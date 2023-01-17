@@ -4,8 +4,8 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h1>About</h1>
-            <p>We like to talk about ourselves here!</p>
+            <h1>{{index .StrMap "title"}}</h1> <!-- take some information from models.PageData structure -->
+            <p>{{index .StrMap "content"}}</p>
         </div>
     </div>
 </div>

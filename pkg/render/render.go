@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/yesilyurtburak/go-web-basics-3/models"
 	"github.com/yesilyurtburak/go-web-basics-3/pkg/helpers"
 )
 
@@ -25,7 +26,7 @@ func makeTemplateCache(t string) error {
 }
 
 // this function renders the template on the browser
-func RenderTemplate(w http.ResponseWriter, t string) {
+func RenderTemplate(w http.ResponseWriter, t string, pd *models.PageData) {
 	var tmpl *template.Template
 	var err error
 	// check if the template is already in cache
@@ -37,6 +38,6 @@ func RenderTemplate(w http.ResponseWriter, t string) {
 		fmt.Println("Template is loaded from cache")
 	}
 	tmpl = templateCache[t]
-	err = tmpl.Execute(w, nil) // writes the template to the response writer `w`
+	err = tmpl.Execute(w, pd) // writes the template to the response writer `w` by sending data `pd`
 	helpers.ErrorCheck(err)
 }
