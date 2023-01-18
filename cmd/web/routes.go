@@ -18,6 +18,8 @@ func routes(app *config.AppConfig) http.Handler {
 	// using middlewares
 	mux.Use(middleware.Recoverer) // built-in middleware for handling the panic gracefully.
 	mux.Use(LogRequestInfo)       // custom middleware that is developed for a spesific purpose.
+	mux.Use(NoSurf)
+	mux.Use(SetupSession)
 
 	// routing pages
 	mux.Get("/", handlers.Repo.HomeHandler)

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/justinas/nosurf"
 )
 
 // Middleware performs some action either before or after a request.
@@ -16,4 +18,24 @@ func LogRequestInfo(next http.Handler) http.Handler {
 		fmt.Println(r.URL.Path)
 		next.ServeHTTP(w, r) // move on to the next data that we want to serve
 	})
+}
+
+// A middleware for setup session data.
+func SetupSession(next http.Handler) http.Handler {
+	return sessionManager.LoadAndSave(next) // Load and save the session data by passing a session token as a cookie.
+}
+
+// A middleware for setup csrf protection.
+func NoSurf(next http.Handler) http.Handler {
+	noSurfHandler := nosurf.New(next)
+	noSurfHandler.SetBaseCookie(http.Cookie{
+		Name:     "mycsrfcookie",
+		Path:     "/",
+		Domain:   "",
+		Secure:   false, // are cookies encrypted? true requires https
+		HttpOnly: true,
+		MaxAge:   3600,
+		SameSite: http.SameSiteLaxMode, // for development
+	})
+	return noSurfHandler
 }
