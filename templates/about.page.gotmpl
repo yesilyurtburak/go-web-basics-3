@@ -6,6 +6,13 @@
         <div class="col">
             <h1>{{index .StrMap "title"}}</h1> <!-- take some information from models.PageData structure -->
             <p>{{index .StrMap "content"}}</p>
+            <p>
+                {{if ne (index .StrMap "userid") ""}}
+                    Your user id : {{index .StrMap "userid"}}
+                {{else}}
+                    You are not logged in. Login here <a href="/">Home</a>
+                {{end}}
+            </p>
         </div>
     </div>
 </div>
